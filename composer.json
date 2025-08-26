@@ -1,0 +1,15 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Core\\": "core/",
+            "Core\\Error\\": "core/error",
+            "Controller\\": "src/controller/",
+            "Helper\\": "src/helper/",
+            "Middleware\\": "src/middleware/",
+            "Model\\": "src/model/"
+        }
+    },
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
