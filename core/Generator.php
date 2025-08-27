@@ -33,14 +33,24 @@ class Generator{
         return $xml->asXML();			
     }
 
-    private static function parseXML(array $data, &$xmlData ): void {
-        foreach( $data as $key => $value ) {
-            if( is_array($value) ) {
-                if( is_numeric($key) ) $key = "record";
-                $subnode = $xmlData->addChild($key);
-                self::parseXML($value, $subnode);
+    private static function parseXML(array $data, \SimpleXMLElement &$xmlData): void {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                if (is_numeric($key)) {
+                    $subnode = $xmlData->addChild("record");
+                    $subnode->addAttribute("index", (string)$key);
+                    self::parseXML($value, $subnode);
+                } else {
+                    $subnode = $xmlData->addChild($key);
+                    self::parseXML($value, $subnode);
+                }
             } else {
-                $xmlData->addChild($key, Utils::validateXmlString($value));
+                if (is_numeric($key)) {
+                    $subnode = $xmlData->addChild("record", Utils::validateXmlString((string)$value));
+                    $subnode->addAttribute("index", (string)$key);
+                } else {
+                    $xmlData->addChild($key, Utils::validateXmlString((string)$value));
+                }
             }
         }
     }

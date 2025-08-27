@@ -26,8 +26,8 @@ class Config {
             $host = $_SERVER["HTTP_HOST"];
             $protocol = (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off" || $_SERVER["SERVER_PORT"] == 443) ? "https://" : "http://";
             $path = rtrim($protocol . $host . dirname($_SERVER["PHP_SELF"]), "/");
-            $env = array_search($path, $data["env"] ?? []) ?: "development";
-            if ($env == "error") throw new \Core\Error\ErrorWrapper("Environment is not recognized");
+            $env = array_search($path, $data["env"] ?? []);// ?: "development";
+            if (!$env) throw new \Core\Error\ErrorWrapper("Environment is not recognized. Please check config/environment.php");
             $key = ($key === "env") ? "$key.$env" : "$env.$key";
         }
         

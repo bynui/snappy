@@ -124,6 +124,8 @@
         code,
         pre {
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            overflow-wrap: break-word;
+            word-break: break-all;
         }
 
         .inline-code {
@@ -225,7 +227,7 @@
                 <div class="grid">
                     <div class="row">
                         <div class="label">Method</div>
-                        <div class="value"><span class="inline-code"><?=$detail["method"]?></span></div>
+                        <div class="value"><span class="inline-code"><?=$detail["method"] ?? "N/A"?></span></div>
                     </div>
                     <div class="row">
                         <div class="label">Route</div>
@@ -233,7 +235,7 @@
                     </div>
                     <div class="row">
                         <div class="label">Path</div>
-                        <div class="value"><?=$detail["path"]?></div>
+                        <div class="value"><?=$detail["path"] ?? "N/A"?></div>
                     </div>
                 </div>
             </div>
