@@ -2,7 +2,9 @@
 
 # Snappy
 
-A simple & straight-forward PHP REST API framework for generating APIs with support for JSON/JSONP, XML, and HTML output
+A simple & straight-forward PHP REST API framework for generating APIs with support for JSON/JSONP, XML, and HTML output.
+
+Documentation: https://bynui.github.io/docs/snappy
 
 ## Author
 
