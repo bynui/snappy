@@ -89,7 +89,7 @@ class ErrorHandler extends Data{
         $detail = [            
             "path" => self::getData("urls.path"),
             "method" => self::getData("urls.method"),
-            "route" => is_null($route) ? "N/A. The request didn't reach controller" : $route,
+            "route" => is_null($route) ? "N/A. The request didn't reach your controller" : $route,
             "code" => $param["code"],
             "message" => $param["message"],
             "file" => $param["error"]->getFile(),

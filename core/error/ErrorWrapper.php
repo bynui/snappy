@@ -5,7 +5,7 @@ namespace Core\Error;
 class ErrorWrapper extends \Exception{
     protected $rawCode;
 
-    public function __construct($input, int $code = 0){
+    public function __construct(\Throwable | string $input, int $code = 0){
         if ($input instanceof \Throwable) {
             $msg = $input->getMessage();
             $rawCode = $input->getCode();

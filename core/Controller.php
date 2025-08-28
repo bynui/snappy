@@ -68,15 +68,15 @@ abstract class Controller extends Middleware {
         return Generator::generateJSON($finalResult, $jsonpCallback);
     }
 
-    final protected function html(string $tpl, array $result = null): string{
+    final protected function html(string $template, array $result = []): string{
         header("Content-type: text/html; charset=UTF-8");
         $finalResult = $this->modifyResult($result);
         $view = trim(Config::getConfig("view"),"/");
         $env = trim(Config::getConfig("env"),"/");
-        $template = trim($tpl,"/");
+        $tpl = trim($template,"/");
 
-        if (file_exists("$view/$template.php")){
-            return Generator::generateHTML("$env/$view/$template.php", $finalResult);
+        if (file_exists("$view/$tpl")){
+            return Generator::generateHTML("$env/$view/$tpl", $finalResult);
         }else{
             throw new \Core\Error\ErrorWrapper("Template file doesn't exist",404);
         }

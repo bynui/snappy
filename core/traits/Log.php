@@ -27,12 +27,12 @@ trait Log {
         return $msg;
     }
 
-    public static function logDebug(mixed $message, array $context = []): void {
-        self::write("DEBUG", $message, $context);
+    public static function logInfo(mixed $message): void {
+        self::write("INFO", $message);
     }
 
-    public static function logInfo(mixed $message, array $context = []): void {
-        self::write("INFO", $message, $context);
+    public static function logDebug(mixed $message, array $context = []): void {
+        self::write("DEBUG", $message, $context);
     }
 
     public static function logError(mixed $message, array $context = [], string $errornumber = ""): void {

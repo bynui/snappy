@@ -51,7 +51,7 @@ class Examples extends Controller{
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("/web-page/view-examples",$result);
+                    return $this->html("/web-page/view-examples.php",$result);
                 } else {                    
                     $json = $this->json($result);
                     return $json;
@@ -82,7 +82,7 @@ class Examples extends Controller{
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("/web-page/view-examples",$result);
+                    return $this->html("/web-page/view-examples.php",$result);
                 } else {
                     $json = $this->json($result);
                     return $json;
@@ -114,7 +114,7 @@ class Examples extends Controller{
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("/web-page/view-examples",$result);
+                    return $this->html("/web-page/view-examples.php",$result);
                 } else {
                     return $this->json($result);
                 }
@@ -133,7 +133,7 @@ class Examples extends Controller{
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
-                    return $this->html("/web-page/view-examples",$result);
+                    return $this->html("/web-page/view-examples.php",$result);
                 } else {
                     return $this->json($result);
                 }
