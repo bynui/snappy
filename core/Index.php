@@ -23,9 +23,14 @@ class Index extends Data{
         $this::setData("queries", $parsed);
         $url = rtrim($parsedurl["path"], "/");
         $base = dirname($_SERVER["PHP_SELF"]);
-        $endpoint = (Config::getConfig("settings.supportHtaccess", "app")) ? substr($url, strlen($base) + 1) : $_GET["endpoint"];
+        if (Config::getConfig("settings.supportHtaccess", "app")) {
+            if (isset($_GET["endpoint"])) throw new \Core\Error\ErrorWrapper("supportHtaccess config is true. You must use pretty URL. See this doc: https://bynui.github.io/docs/snappy/controller-routing.html#mod-rewrite-support", 400);
+            $endpoint = substr($url, strlen($base) + 1);
+        }else{
+            if (!isset($_GET["endpoint"])) throw new \Core\Error\ErrorWrapper("supportHtaccess config is false. You must use query string style in URL. See this doc: https://bynui.github.io/docs/snappy/controller-routing.html#mod-rewrite-support", 400);
+            $endpoint = $_GET["endpoint"];
+        }        
         $controllfile = explode("/",$endpoint);
-
         $this::setData("urls.controller", ( !empty($endpoint) ) ? $controllfile[0] : $controllfile);
         $this::setData("urls.endpoint", "/".$endpoint);
         $this::setData("urls.base", $base);
