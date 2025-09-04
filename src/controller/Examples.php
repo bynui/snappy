@@ -151,7 +151,7 @@ class Examples extends Controller{
                         ":id" => Utils::validateString( $callbackvalues::getData("keys.id") )
                     ];
                     $record = $this->model->getExampleById( $schema );
-                    $templateString = $this->html("/email-template/theme1/index", [
+                    $templateString = $this->html("/email-template/theme1/index.php", [
                         "FullName" => $record["result"][0]["FirstName"] . " " . $record["result"][0]["LastName"]
                     ]);
                     $mail = new Mailer(); 
