@@ -71,20 +71,46 @@ class Generate extends Command{
         match ($type) {
             "controller" => $this->makeController($name, $flags),
             "model" => $this->makeModel($name),
-            "middleware" => $this->makeMiddleware($name)
+            "middleware" => $this->makeMiddleware($name, ['get', 'post', 'put', 'patch', 'delete'])
         };
     }
 
     /* ---------- CONTROLLER ---------- */
 
+    private function makeControllerMethods(array $methods){
+        $methods = array_map(function($method){
+            $mapCode = "        \$this->map([\n            \"/\" => function(\$callback){\n            }\n        ]);";
+            return "    public function {$method}(){\n{$mapCode}\n    }\n";
+        }, $methods);
+
+        return implode("\n", $methods);
+    }
+
+    private function makeMiddlewareMethods(array $methods){
+        $methods = array_map(function($method){
+            return "    public function {$method}(\$sequence){\n    }\n";
+        }, $methods);
+
+        return implode("\n", $methods);
+    }
+
     private function makeController(string $name, array $flags){
         
         $model = null;
         $withMiddleware = false;
+        $methods = [];
 
         foreach ($flags as $f) {
             if ($f === "--with-model") {
                 $model = $name;
+            }
+
+            if ($f === "--with-methods") {
+                $methods = ['get', 'post', 'put', 'patch', 'delete'];
+            }
+
+            if ($f === "--with-middleware") {
+                $withMiddleware = true;
             }
 
             if (str_starts_with($f, "--with-model:")) {
@@ -95,8 +121,17 @@ class Generate extends Command{
                 }
             }
 
-            if ($f === "--with-middleware") {
-                $withMiddleware = true;
+            if (str_starts_with($f, "--with-methods:")) {
+                $methodList = explode(",", explode(":", $f, 2)[1] ?? '');
+                $methodList = array_map('trim', $methodList);
+                $methodList = array_filter($methodList, fn($m) => in_array(strtolower($m), ['get', 'post', 'put', 'patch', 'delete']));
+
+                if (empty($methodList)) {
+                    $this->error("No valid methods specified for --with-methods");
+                    return;
+                }
+
+                $methods = $methodList;
             }
         }
 
@@ -105,7 +140,7 @@ class Generate extends Command{
         }
 
         if ($withMiddleware) {
-            $this->makeMiddleware($name);
+            $this->makeMiddleware($name, $methods);
         }
 
         $path = "src/controller/{$name}.php";
@@ -138,45 +173,7 @@ namespace Controller;
 use Core\\Controller;
 {$useModel}
 class {$name} extends Controller{
-{$property}{$constructor}    public function get(){
-        $this->map([
-            "/" => function( \$callback ){
-
-            }
-        ]);
-    }
-
-    public function post(){
-        $this->map([
-            "/" => function( \$callback ){
-
-            }
-        ]);
-    }
-
-    public function put(){
-        $this->map([
-            "/" => function( \$callback ){
-
-            }
-        ]);
-    }
-
-    public function patch(){
-        $this->map([
-            "/" => function( \$callback ){
-
-            }
-        ]);
-    }
-
-    public function delete(){
-        $this->map([
-            "/" => function( \$callback ){
-
-            }
-        ]);
-    }
+{$property}{$constructor}{$this->makeControllerMethods($methods)}
 }
 ?>
 PHP;
@@ -217,7 +214,7 @@ PHP;
 
     /* ---------- MIDDLEWARE ---------- */
 
-    private function makeMiddleware(string $name)
+    private function makeMiddleware(string $name, array $methods = [])
     {
         $path = "src/middleware/{$name}.php";
 
@@ -231,27 +228,7 @@ namespace Middleware;
 use Core\\Middleware;
 
 class {$name} extends Middleware{
-
-    public function get(\$sequence){
-
-    }
-
-    public function post(\$sequence){
-
-    }
-
-    public function put(\$sequence){
-
-    }
-
-    public function patch(\$sequence){
-
-    }
-
-    public function delete(\$sequence){
-
-    }
-
+{$this->makeMiddlewareMethods($methods)}
 }
 ?>
 PHP;
