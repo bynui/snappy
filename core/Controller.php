@@ -87,6 +87,11 @@ abstract class Controller extends Middleware {
         return Generator::generateXML($finalResult);
     }
 
+    final protected function csv( array $result, bool $hasHeader = false ): string{
+        $finalResult = $this->modifyResult($result);
+        return Generator::generateCSV($finalResult, $hasHeader);
+    }
+
     private function modifyResult(array $result): array{
         $this->setData("records", $result);
         $this->executeMiddlewares("after");

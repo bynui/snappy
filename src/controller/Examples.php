@@ -5,7 +5,7 @@
  * Your request methods (get, post, put, patch, delete) are defined as functions
  * 
  * Note in this example, each endpoint uses the query string parameter "?format=" just to demonstrate different outputs 
- * to the available formats: JSON, JSONP, XML & HTML template. The default output is JSON if there's no "?format=" in the url.
+  * to the available formats: JSON, JSONP, XML, CSV & HTML template. The default output is JSON if there's no "?format=" in the url.
  * If there's jsonpcallback query string in url ("?jsonpcallback=your_callback_name") then it outputs as JSONP.
  * In the real code choose the desired output format. Default is JSON.
  * 
@@ -45,13 +45,15 @@ class Examples extends Controller{
              * url: http://yourdomain/examples
              */
             "/" => function( $callbackvalues ){
-                $result = $this->model->getAllExamples();
+                                $result = $this->model->getAllExamples();
                 $format = $callbackvalues::getData("queries.format");
 
                 if ($format == "xml"){
                     return $this->xml($result);
                 } else if ($format == "html"){
                     return $this->html("/web-page/view-examples.php",$result);
+                } else if ($format == "csv"){
+                    return $this->csv($result);
                 } else {                    
                     $json = $this->json($result);
                     return $json;
@@ -83,6 +85,8 @@ class Examples extends Controller{
                     return $this->xml($result);
                 } else if ($format == "html"){
                     return $this->html("/web-page/view-examples.php",$result);
+                } else if ($format == "csv"){
+                    return $this->csv($result);
                 } else {
                     $json = $this->json($result);
                     return $json;
